@@ -31,6 +31,22 @@ function showAuth() {
     $('#auth-msg').textContent = 'Link đăng nhập không dùng được (' + h.get('error_description') + '). Hãy gửi lại link mới.';
     history.replaceState(null, '', location.pathname);
   }
+  $('#show-email').onclick = e => { e.preventDefault(); $('#auth-form').classList.remove('hidden'); };
+  $('#guest-form').onsubmit = async e => {
+    e.preventDefault();
+    const name = $('#guest-name').value.trim();
+    if (!name) return;
+    $('#auth-msg').textContent = 'Đang vào game...';
+    try {
+      await S.store.signInGuest(name);
+      $('#auth').classList.add('hidden');
+      await boot();
+    } catch (err) {
+      $('#auth-msg').textContent = /anonymous/i.test(err.message)
+        ? 'Máy chủ chưa bật chế độ chơi không cần đăng ký (Allow anonymous sign-ins).'
+        : 'Lỗi: ' + err.message;
+    }
+  };
   let email = '';
   $('#auth-form').onsubmit = async e => {
     e.preventDefault();
@@ -432,10 +448,12 @@ function openProfile() {
     <label>Ảnh đại diện</label>
     <div class="avatars" id="pf-av">${AVATARS.map(a => `<button class="${a === p.avatar ? 'on' : ''}">${a}</button>`).join('')}</div>
     <button id="pf-save" class="btn btn-primary btn-block" style="margin-top:12px">Lưu</button>
+    ${S.store.isGuest ? `<div class="note" style="margin-top:12px">Bạn đang chơi không cần đăng ký. Tiến trình chỉ lưu trên máy này. Muốn giữ khi đổi điện thoại thì gắn email (không bắt buộc):
+      <div class="row" style="margin-top:8px"><input id="pf-email" type="email" placeholder="Email"><button id="pf-link" class="btn">Lưu</button></div></div>` : ''}
     <button id="pf-push" class="btn btn-blue btn-block" style="margin-top:8px">🔔 Bật thông báo</button>
     <button id="pf-video" class="btn btn-block" style="margin-top:8px">▶ Xem video nhận lượt tạo điểm</button>
     ${p.is_admin ? '<a class="btn btn-block" style="margin-top:8px;text-align:center;text-decoration:none;color:inherit" href="admin.html">🛠️ Trang quản trị</a>' : ''}
-    <button id="pf-out" class="btn btn-block" style="margin-top:8px;color:var(--bad)">${S.store.demo ? 'Xoá dữ liệu demo' : 'Đăng xuất'}</button>
+    <button id="pf-out" class="btn btn-block" style="margin-top:8px;color:var(--bad)">${S.store.demo ? 'Xoá dữ liệu demo' : S.store.isGuest ? 'Thoát (mất tiến trình nếu chưa gắn email)' : 'Đăng xuất'}</button>
     <div class="note">Trên iPhone, thông báo chỉ hoạt động khi bạn mở trang bằng Safari, bấm Chia sẻ → "Thêm vào Màn hình chính", rồi mở app từ màn hình chính.</div>`);
   let av = p.avatar;
   document.querySelectorAll('#pf-av button').forEach(b => b.onclick = () => {
@@ -447,6 +465,12 @@ function openProfile() {
     catch (e) { toast('Lỗi: ' + e.message); }
   };
   $('#pf-push').onclick = enablePush;
+  if ($('#pf-link')) $('#pf-link').onclick = async () => {
+    const email = $('#pf-email').value.trim();
+    if (!email) return;
+    try { await S.store.linkEmail(email); toast('Đã gửi email xác nhận. Bấm link trong email để hoàn tất.', 4000); }
+    catch (e) { toast('Lỗi: ' + e.message); }
+  };
   $('#pf-video').onclick = () => { closeSheet(); watchVideo(); };
   $('#pf-out').onclick = async () => { await S.store.signOut(); location.reload(); };
 }

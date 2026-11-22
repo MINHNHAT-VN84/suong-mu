@@ -161,6 +161,23 @@ class SupabaseStore {
     const { error } = await this.sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.hostname === 'localhost' ? location.origin + location.pathname : (CONFIG.APP_URL || location.origin + location.pathname) } });
     if (error) throw error;
   }
+  // Chơi ngay không cần email (Supabase anonymous sign-in)
+  async signInGuest(name) {
+    const { data, error } = await this.sb.auth.signInAnonymously();
+    if (error) throw error;
+    this.user = data.user;
+    for (let i = 0; i < 5; i++) { // chờ trigger tạo hồ sơ
+      const { error: e2, count } = await this.sb.from('profiles').update({ display_name: name }, { count: 'exact' }).eq('id', this.uid);
+      if (!e2 && count) return;
+      await new Promise(r => setTimeout(r, 400));
+    }
+  }
+  get isGuest() { return !!this.user?.is_anonymous; }
+  // Gắn email để giữ tiến trình khi đổi máy
+  async linkEmail(email) {
+    const { error } = await this.sb.auth.updateUser({ email }, { emailRedirectTo: CONFIG.APP_URL });
+    if (error) throw error;
+  }
   async verifyCode(email, token) {
     let r = await this.sb.auth.verifyOtp({ email, token, type: 'email' });
     if (r.error) r = await this.sb.auth.verifyOtp({ email, token, type: 'signup' });

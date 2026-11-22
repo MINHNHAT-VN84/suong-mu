@@ -60,9 +60,14 @@
       <div class="logo">🌫️</div>
       <h1>Sương Mù</h1>
       <p>Đi bộ để xua tan sương mù, khám phá thành phố và đua diện tích với bạn bè.</p>
-      <form id="auth-form">
+      <form id="guest-form">
+        <input id="guest-name" maxlength="30" placeholder="Tên của bạn trong game" required autocomplete="nickname">
+        <button class="btn btn-primary" type="submit">Chơi ngay</button>
+      </form>
+      <p><a href="#" id="show-email" class="muted">Đã lưu tài khoản bằng email? Đăng nhập tại đây</a></p>
+      <form id="auth-form" class="hidden">
         <input id="auth-email" type="email" placeholder="Email của bạn" required autocomplete="email">
-        <button class="btn btn-primary" type="submit">Gửi link đăng nhập</button>
+        <button class="btn" type="submit">Gửi link đăng nhập</button>
       </form>
       <form id="code-form" class="hidden">
         <input id="auth-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Mã số trong email">

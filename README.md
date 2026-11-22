@@ -55,10 +55,9 @@ Bạn cần tạo 2 tài khoản miễn phí:
 Đưa cả thư mục lên GitHub Pages / Netlify / Vercel. Không cần build.
 
 ### Bước 4: Cấp quyền quản trị cho mình
-Đăng nhập app một lần bằng email của bạn, rồi chạy trong SQL Editor:
+Vào app một lần với tên của bạn, rồi chạy trong SQL Editor (thay đúng tên bạn đã nhập):
 ```sql
-update public.profiles set is_admin = true
-where id = (select id from auth.users where email = 'email-cua-ban@gmail.com');
+update public.profiles set is_admin = true where display_name = 'Tên của bạn';
 ```
 Sau đó trong tab **Tôi** sẽ có nút **Trang quản trị**.
 
