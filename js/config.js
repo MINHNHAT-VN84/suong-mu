@@ -2,6 +2,8 @@
 export const CONFIG = {
   SUPABASE_URL: 'https://zcqpwolxmdijlpejipsc.supabase.co',        // ví dụ: 'https://abcd1234.supabase.co'
   SUPABASE_ANON_KEY: 'sb_publishable_1-WVPuuor9rQrjjMB6ggfg_LLADEyQn',   // Project Settings > API > anon public key
+  // Địa chỉ app trên mạng: link đăng nhập trong email sẽ mở về đây
+  APP_URL: 'https://minhnhat-vn84.github.io/suong-mu/',
   VAPID_PUBLIC_KEY: '',      // khoá công khai Web Push (xem README)
 
   // Video phải xem hết mới được thêm lượt tạo điểm. Thay bằng video của bạn.

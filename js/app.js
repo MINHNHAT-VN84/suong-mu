@@ -25,14 +25,33 @@ async function main() {
 
 function showAuth() {
   $('#auth').classList.remove('hidden');
+  // Link trong email bị lỗi (hết hạn, đã dùng) thì Supabase trả lỗi trên địa chỉ trang
+  const h = new URLSearchParams(location.hash.slice(1) || location.search.slice(1));
+  if (h.get('error_description')) {
+    $('#auth-msg').textContent = 'Link đăng nhập không dùng được (' + h.get('error_description') + '). Hãy gửi lại link mới.';
+    history.replaceState(null, '', location.pathname);
+  }
+  let email = '';
   $('#auth-form').onsubmit = async e => {
     e.preventDefault();
-    const email = $('#auth-email').value.trim();
+    email = $('#auth-email').value.trim();
     $('#auth-msg').textContent = 'Đang gửi...';
     try {
       await S.store.signIn(email);
-      $('#auth-msg').textContent = 'Đã gửi link đăng nhập tới ' + email + '. Mở email trên điện thoại này và bấm vào link.';
+      $('#auth-msg').textContent = 'Đã gửi email tới ' + email + '. Bấm vào link trong email, hoặc nhập mã số trong email vào ô trên.';
+      $('#code-form').classList.remove('hidden');
     } catch (err) { $('#auth-msg').textContent = 'Lỗi: ' + err.message; }
+  };
+  $('#code-form').onsubmit = async e => {
+    e.preventDefault();
+    const code = $('#auth-code').value.trim();
+    if (!code) return;
+    $('#auth-msg').textContent = 'Đang kiểm tra mã...';
+    try {
+      await S.store.verifyCode(email, code);
+      $('#auth').classList.add('hidden');
+      await boot();
+    } catch (err) { $('#auth-msg').textContent = 'Mã không đúng hoặc đã hết hạn: ' + err.message; }
   };
 }
 

@@ -158,8 +158,14 @@ class SupabaseStore {
     return this.user;
   }
   async signIn(email) {
-    const { error } = await this.sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+    const { error } = await this.sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.hostname === 'localhost' ? location.origin + location.pathname : (CONFIG.APP_URL || location.origin + location.pathname) } });
     if (error) throw error;
+  }
+  async verifyCode(email, token) {
+    let r = await this.sb.auth.verifyOtp({ email, token, type: 'email' });
+    if (r.error) r = await this.sb.auth.verifyOtp({ email, token, type: 'signup' });
+    if (r.error) throw r.error;
+    this.user = r.data.user;
   }
   async signOut() { await this.sb.auth.signOut(); }
   async getProfile() {
