@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1d2435">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Sương Mù - Bản đồ khám phá</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="map"></div>
+
+  <header class="topbar">
+    <div class="chip" title="Diện tích đã khám phá">🗺️ <b id="stat-area">0 m²</b></div>
+    <div class="chip" title="Chuỗi ngày">🔥 <b id="stat-streak">0</b></div>
+    <div class="chip" title="Lượt tạo điểm">🚩 <b id="stat-credits">0</b></div>
+  </header>
+
+  <div id="status" class="status hidden"></div>
+
+  <div class="fabs">
+    <button id="btn-sim" class="fab hidden" title="Chế độ đi thử">🚶</button>
+    <button id="btn-locate" class="fab" title="Về vị trí của tôi">◎</button>
+    <button id="btn-add" class="fab fab-primary" title="Tạo điểm mới tại đây">＋</button>
+  </div>
+
+  <nav class="bottomnav">
+    <button data-view="map" class="active"><span>🧭</span>Bản đồ</button>
+    <button data-view="rank"><span>🏅</span>Xếp hạng</button>
+    <button data-view="badges"><span>🎖️</span>Huy hiệu</button>
+    <button data-view="profile"><span>👤</span>Tôi</button>
+  </nav>
+
+  <div id="backdrop" class="backdrop hidden"></div>
+  <section id="sheet" class="sheet hidden" aria-modal="true" role="dialog">
+    <div class="sheet-handle"></div>
+    <div id="sheet-body"></div>
+  </section>
+
+  <div id="video-modal" class="video-modal hidden">
+    <div class="video-box">
+      <p class="video-title">Xem hết video để nhận <b>+1 lượt tạo điểm</b></p>
+      <video id="reward-video" playsinline preload="auto"></video>
+      <div class="video-bar"><div id="video-progress"></div></div>
+      <div class="video-actions">
+        <button id="video-play" class="btn btn-primary">▶ Phát</button>
+        <button id="video-close" class="btn">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="auth" class="auth hidden">
+    <div class="auth-card">
+      <div class="logo">🌫️</div>
+      <h1>Sương Mù</h1>
+      <p>Đi bộ để xua tan sương mù, khám phá thành phố và đua diện tích với bạn bè.</p>
+      <form id="auth-form">
+        <input id="auth-email" type="email" placeholder="Email của bạn" required autocomplete="email">
+        <button class="btn btn-primary" type="submit">Gửi link đăng nhập</button>
+      </form>
+      <p id="auth-msg" class="muted"></p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

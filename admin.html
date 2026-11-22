@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản trị - Sương Mù</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    html, body { overflow: auto; background: #f3f5f9; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+    #pick-map { height: 280px; border-radius: 12px; margin-top: 8px; }
+    .seg { display: flex; gap: 8px; flex-wrap: wrap; }
+    .seg label { margin: 0; display: flex; align-items: center; gap: 6px; color: var(--text); font-size: 15px;
+      background: #f5f6f9; border-radius: 10px; padding: 8px 12px; }
+    .seg input { width: auto; }
+    .hist { border-bottom: 1px solid var(--line); padding: 10px 0; }
+    a.back { color: var(--accent-2); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p><a class="back" href="./">← Về bản đồ</a></p>
+    <h1>🛠️ Gửi thông báo</h1>
+    <div id="denied" class="card hidden">Tài khoản này không có quyền quản trị.</div>
+    <div id="panel" class="hidden">
+      <div class="card">
+        <label for="t">Tiêu đề</label>
+        <input id="t" maxlength="60" placeholder="VD: Sự kiện cuối tuần 🎉">
+        <label for="b">Nội dung</label>
+        <textarea id="b" maxlength="200" placeholder="VD: Mở 2.000 m² trong 2 ngày để nhận huy hiệu Lữ khách!"></textarea>
+        <label for="u">Mở trang khi bấm (tuỳ chọn)</label>
+        <input id="u" placeholder="./">
+        <label>Gửi tới</label>
+        <div class="seg">
+          <label><input type="radio" name="tg" value="all" checked> Tất cả người chơi</label>
+          <label><input type="radio" name="tg" value="area"> Theo khu vực</label>
+        </div>
+        <div id="area-box" class="hidden">
+          <label for="r">Bán kính (km). Chạm vào bản đồ để chọn tâm.</label>
+          <input id="r" type="number" min="0.5" max="200" step="0.5" value="5">
+          <div id="pick-map"></div>
+        </div>
+        <button id="send" class="btn btn-primary btn-block" style="margin-top:14px">Gửi thông báo</button>
+        <p id="msg" class="muted"></p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Đã gửi gần đây</h3>
+        <div id="hist" class="muted">Đang tải...</div>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
