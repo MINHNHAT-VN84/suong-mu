@@ -518,7 +518,7 @@ async function enablePush() {
   const perm = await Notification.requestPermission();
   if (perm !== 'granted') return toast('Bạn chưa cho phép thông báo');
   if (!CONFIG.VAPID_PUBLIC_KEY) {
-    S.swReg.showNotification('Sương Mù', { body: 'Thông báo đã bật (chế độ demo).', icon: 'icons/icon-192.png' });
+    S.swReg.showNotification('Thành Phố Sương Mù', { body: 'Thông báo đã bật (chế độ demo).', icon: 'icons/icon-192.png' });
     return toast('Đã bật thông báo');
   }
   try {

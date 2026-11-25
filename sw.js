@@ -1,5 +1,5 @@
 // Service worker: chạy offline cơ bản + nhận thông báo đẩy.
-const CACHE = 'fogmap-v2';
+const CACHE = 'fogmap-v3';
 const SHELL = ['./', 'index.html', 'styles.css', 'js/app.js', 'js/config.js', 'js/geo.js', 'js/fog.js', 'js/store.js', 'js/badges.js', 'js/icons.js',
   'manifest.webmanifest', 'icons/icon-192.png'];
 
@@ -23,8 +23,8 @@ self.addEventListener('fetch', e => {
 
 self.addEventListener('push', e => {
   let d = {};
-  try { d = e.data.json(); } catch { d = { title: 'Sương Mù', body: e.data?.text() }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'Sương Mù', {
+  try { d = e.data.json(); } catch { d = { title: 'Thành Phố Sương Mù', body: e.data?.text() }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'Thành Phố Sương Mù', {
     body: d.body || '', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', data: { url: d.url || './' },
   }));
 });

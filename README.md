@@ -1,4 +1,4 @@
-# Sương Mù - bản đồ khám phá
+# Thành Phố Sương Mù (Fog City)
 
 Web app chạy trên điện thoại (PWA, cài được ra màn hình chính). Bản đồ bị phủ sương; bạn đi tới đâu, sương mở ra trong bán kính 20 m tới đó.
 
