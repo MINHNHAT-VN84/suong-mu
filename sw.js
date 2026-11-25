@@ -1,6 +1,6 @@
 // Service worker: chạy offline cơ bản + nhận thông báo đẩy.
-const CACHE = 'fogmap-v1';
-const SHELL = ['./', 'index.html', 'styles.css', 'js/app.js', 'js/config.js', 'js/geo.js', 'js/fog.js', 'js/store.js', 'js/badges.js',
+const CACHE = 'fogmap-v2';
+const SHELL = ['./', 'index.html', 'styles.css', 'js/app.js', 'js/config.js', 'js/geo.js', 'js/fog.js', 'js/store.js', 'js/badges.js', 'js/icons.js',
   'manifest.webmanifest', 'icons/icon-192.png'];
 
 self.addEventListener('install', e => {

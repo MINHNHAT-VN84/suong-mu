@@ -3,6 +3,10 @@ import { createStore } from './store.js';
 import { FogLayer } from './fog.js';
 import * as G from './geo.js';
 import { BADGES, CATEGORIES, catOf } from './badges.js';
+import { icon, mascot, hydrateIcons } from './icons.js';
+
+hydrateIcons();
+document.getElementById('logo').innerHTML = mascot(96);
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -106,9 +110,9 @@ function initMap() {
 }
 
 function updateMeMarker(p, fast) {
-  const icon = L.divIcon({ className: '', html: `<div class="me-icon${fast ? ' fast' : ''}"></div>`, iconSize: [22, 22], iconAnchor: [11, 11] });
-  if (!S.meMarker) S.meMarker = L.marker([p.lat, p.lng], { icon, zIndexOffset: 1000, interactive: false }).addTo(S.map);
-  else { S.meMarker.setLatLng([p.lat, p.lng]); S.meMarker.setIcon(icon); }
+  const meIc = L.divIcon({ className: '', html: `<div class="me-icon${fast ? ' fast' : ''}">${icon('user', 34)}</div>`, iconSize: [44, 44], iconAnchor: [22, 22] });
+  if (!S.meMarker) S.meMarker = L.marker([p.lat, p.lng], { icon: meIc, zIndexOffset: 1000, interactive: false }).addTo(S.map);
+  else { S.meMarker.setLatLng([p.lat, p.lng]); S.meMarker.setIcon(meIc); }
 }
 
 /* --------------------------- GPS & chống gian lận ------------------------ */
@@ -285,8 +289,8 @@ function refreshMarkers() {
   for (const pl of S.places.values()) {
     if (S.markers.has(pl.id) || !isExplored(pl.lat, pl.lng)) continue;
     const cat = catOf(pl.category);
-    const icon = L.divIcon({ className: '', html: `<div class="place-icon ${pl.source === 'user' ? 'user' : ''}">${cat.icon}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
-    const m = L.marker([pl.lat, pl.lng], { icon }).addTo(S.map).on('click', () => openPlace(pl));
+    const plIc = L.divIcon({ className: '', html: `<div class="place-icon ${pl.source === 'user' ? 'user' : ''}">${cat.icon}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
+    const m = L.marker([pl.lat, pl.lng], { icon: plIc }).addTo(S.map).on('click', () => openPlace(pl));
     S.markers.set(pl.id, m);
   }
 }
@@ -556,7 +560,7 @@ function bindUI() {
   $('#btn-add').onclick = openCreatePlace;
   $('#btn-sim').onclick = () => {
     S.sim.car = !S.sim.car;
-    $('#btn-sim').textContent = S.sim.car ? '🚗' : '🚶';
+    $('#btn-sim').innerHTML = icon(S.sim.car ? 'car' : 'walk', 28);
     $('#btn-sim').classList.toggle('on', S.sim.car);
     toast(S.sim.car ? 'Đi thử bằng ô tô (60 km/h): sương sẽ KHÔNG mở' : 'Đi thử đi bộ (5 km/h)');
   };

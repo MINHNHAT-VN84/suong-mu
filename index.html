@@ -17,24 +17,24 @@
   <div id="map"></div>
 
   <header class="topbar">
-    <div class="chip" title="Diện tích đã khám phá">🗺️ <b id="stat-area">0 m²</b></div>
-    <div class="chip" title="Chuỗi ngày">🔥 <b id="stat-streak">0</b></div>
-    <div class="chip" title="Lượt tạo điểm">🚩 <b id="stat-credits">0</b></div>
+    <div class="chip" title="Diện tích đã khám phá"><i data-icon="map" data-size="22"></i><b id="stat-area">0 m²</b></div>
+    <div class="chip" title="Chuỗi ngày"><i data-icon="flame" data-size="22"></i><b id="stat-streak">0</b></div>
+    <div class="chip" title="Lượt tạo điểm"><i data-icon="flag" data-size="22"></i><b id="stat-credits">0</b></div>
   </header>
 
   <div id="status" class="status hidden"></div>
 
   <div class="fabs">
-    <button id="btn-sim" class="fab hidden" title="Chế độ đi thử">🚶</button>
-    <button id="btn-locate" class="fab" title="Về vị trí của tôi">◎</button>
-    <button id="btn-add" class="fab fab-primary" title="Tạo điểm mới tại đây">＋</button>
+    <button id="btn-sim" class="fab hidden" title="Chế độ đi thử"><i data-icon="walk" data-size="28"></i></button>
+    <button id="btn-locate" class="fab" title="Về vị trí của tôi"><i data-icon="locate" data-size="28"></i></button>
+    <button id="btn-add" class="fab fab-primary" title="Tạo điểm mới tại đây"><i data-icon="plus" data-size="26"></i></button>
   </div>
 
   <nav class="bottomnav">
-    <button data-view="map" class="active"><span>🧭</span>Bản đồ</button>
-    <button data-view="rank"><span>🏅</span>Xếp hạng</button>
-    <button data-view="badges"><span>🎖️</span>Huy hiệu</button>
-    <button data-view="profile"><span>👤</span>Tôi</button>
+    <button data-view="map" class="active"><span data-icon="compass" data-size="28"></span>Bản đồ</button>
+    <button data-view="rank"><span data-icon="trophy" data-size="28"></span>Xếp hạng</button>
+    <button data-view="badges"><span data-icon="medal" data-size="28"></span>Huy hiệu</button>
+    <button data-view="profile"><span data-icon="user" data-size="28"></span>Tôi</button>
   </nav>
 
   <div id="backdrop" class="backdrop hidden"></div>
@@ -57,7 +57,7 @@
 
   <div id="auth" class="auth hidden">
     <div class="auth-card">
-      <div class="logo">🌫️</div>
+      <div class="logo" id="logo"></div>
       <h1>Sương Mù</h1>
       <p>Đi bộ để xua tan sương mù, khám phá thành phố và đua diện tích với bạn bè.</p>
       <form id="guest-form">
