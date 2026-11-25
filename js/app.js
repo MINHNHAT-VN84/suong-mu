@@ -148,21 +148,49 @@ function onPosition(p) {
     return;
   }
   const last = S.lastAccepted;
-  let kmh = 0;
+  const MAX = CONFIG.MAX_SPEED_KMH;
+  // Tốc độ do chip GPS đo (Doppler) là đáng tin nhất; không có thì tự tính.
+  const devKmh = (p.speed != null && !isNaN(p.speed) && p.speed >= 0) ? p.speed * 3.6 : null;
+  let kmh = devKmh ?? 0;
   if (last) {
     const dt = (p.t - last.t) / 1000;
     if (dt <= 0) return;
-    const d = G.distance(last, p);
-    kmh = (p.speed != null && p.speed >= 0) ? p.speed * 3.6 : (d / dt) * 3.6;
-    // Dịch chuyển tức thời rất xa trong thời gian ngắn = GPS giả / nhảy điểm
-    if (d > 1000 && dt < 60) kmh = Math.max(kmh, 999);
+    // Trừ đi sai số của 2 lần đo, để GPS "nhảy" khi đứng yên không bị tính là di chuyển
+    const dEff = Math.max(0, G.distance(last, p) - (last.acc || 0) - (p.acc || 0));
+    const calc = (dEff / dt) * 3.6;
+    // Không có tốc độ từ chip: nếu các điểm lạ cũng nối tiếp nhau rất nhanh thì là đang đi xe thật
+    const pv = S.pending;
+    const pvKmh = pv && p.t > pv.t ? Math.max(0, G.distance(pv, p) - (pv.acc || 0) - (p.acc || 0)) / ((p.t - pv.t) / 1000) * 3.6 : 0;
+    S.pending = p;
+    if (calc > MAX && devKmh == null && pvKmh > MAX) {
+      kmh = pvKmh;
+    } else if (calc > MAX && (devKmh == null || devKmh <= MAX)) {
+      // Nhảy điểm nhưng không thật sự chạy nhanh: bỏ qua điểm lạ.
+      // Nếu vị trí mới lặp lại 3 lần liền thì coi đó là vị trí đúng.
+      S.jumps = (S.jumps || 0) + 1;
+      if (S.jumps < 3) return;
+      S.jumps = 0;
+      S.fastCount = 0;
+      S.lastAccepted = { ...p, broken: true };
+      updateMeMarker(p, false);
+      reveal([p]);
+      return;
+    }
+    else if (devKmh == null) kmh = calc;
   }
-  if (kmh > CONFIG.MAX_SPEED_KMH) {
-    updateMeMarker(p, true);
-    setStatus('fast', `Bạn đang đi ${Math.round(kmh)} km/h. Sương chỉ mở khi đi bộ hoặc đạp xe (dưới ${CONFIG.MAX_SPEED_KMH} km/h).`);
+  S.jumps = 0;
+  if (kmh > MAX) {
+    // Chỉ cảnh báo khi đo nhanh 2 lần liên tiếp
+    S.fastCount = (S.fastCount || 0) + 1;
     S.lastAccepted = { ...p, broken: true };
+    if (S.fastCount >= 2) {
+      updateMeMarker(p, true);
+      setStatus('fast', `Bạn đang đi ${Math.round(kmh)} km/h. Sương chỉ mở khi đi bộ hoặc đạp xe (dưới ${MAX} km/h).`);
+    }
     return;
   }
+  S.fastCount = 0;
+  S.pending = null;
   updateMeMarker(p, false);
   if (S.statusKind === 'fast' || S.statusKind === 'weak') clearStatus();
 
@@ -517,7 +545,7 @@ function simWalkTo(target) {
     const next = G.lerp(cur, target, f);
     t += (G.distance(cur, next) / (kmh / 3.6)) * 1000;
     cur = next;
-    onPosition({ lat: cur.lat, lng: cur.lng, acc: 5, t });
+    onPosition({ lat: cur.lat, lng: cur.lng, acc: 0, t });
     if (!S.map.getBounds().pad(-0.25).contains([cur.lat, cur.lng])) S.map.panTo([cur.lat, cur.lng], { animate: false });
   }, 60);
 }

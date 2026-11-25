@@ -65,7 +65,7 @@ Sau đó trong tab **Tôi** sẽ có nút **Trang quản trị**.
 - **iPhone**: chỉ nhận thông báo khi người dùng mở bằng Safari, bấm Chia sẻ → *Thêm vào Màn hình chính*, rồi mở app từ màn hình chính (iOS 16.4 trở lên).
 - **GPS khi tắt màn hình**: web app không ghi được vị trí khi điện thoại khoá màn hình. Muốn đi bộ mà để điện thoại trong túi vẫn mở sương thì cần làm app native (React Native / Flutter). Đây là bước tiếp theo nên làm nếu app có nhiều người chơi.
 - **Video quảng cáo có thưởng**: bản này dùng video của bạn (`REWARD_VIDEO_URL`). Quảng cáo AdMob có thưởng chỉ chạy trong app native; bản web có thể dùng Google Ad Manager (rewarded ads cho web).
-- **Bản đồ nền**: đang dùng CARTO Voyager miễn phí, đủ cho thử nghiệm. Khi có nhiều người dùng nên chuyển sang MapTiler hoặc Stadia Maps (có gói miễn phí, cần API key). Chỉ cần đổi `TILE_URL` trong `js/config.js`.
+- **Bản đồ nền**: đang dùng OpenStreetMap miễn phí, không cần key, đủ cho thử nghiệm. Khi có nhiều người dùng nên chuyển sang MapTiler hoặc Stadia Maps (có gói miễn phí, cần API key). Chỉ cần đổi `TILE_URL` trong `js/config.js`.
 - **Chống gian lận**: lọc tốc độ đang làm ở máy người chơi; máy chủ kiểm tra lượt tạo điểm, video và quyền nhận xét. Muốn chặt hơn có thể chuyển phần lọc tốc độ lên máy chủ.
 
 ## Cấu trúc thư mục

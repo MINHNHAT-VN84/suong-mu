@@ -15,6 +15,6 @@ export const CONFIG = {
   MAX_VIDEO_REWARDS_PER_DAY: 5,
 
   DEFAULT_CENTER: [21.0287, 105.8524], // Hồ Gươm, dùng khi chưa có GPS ở chế độ demo
-  TILE_URL: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-  TILE_ATTRIBUTION: '&copy; OpenStreetMap contributors &copy; CARTO',
+  TILE_URL: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  TILE_ATTRIBUTION: '&copy; OpenStreetMap contributors',
 };
