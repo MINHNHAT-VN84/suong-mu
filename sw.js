@@ -1,5 +1,5 @@
 // Service worker: chạy offline cơ bản + nhận thông báo đẩy.
-const CACHE = 'fogmap-v3';
+const CACHE = 'fogmap-v4';
 const SHELL = ['./', 'index.html', 'styles.css', 'js/app.js', 'js/config.js', 'js/geo.js', 'js/fog.js', 'js/store.js', 'js/badges.js', 'js/icons.js',
   'manifest.webmanifest', 'icons/icon-192.png'];
 
@@ -16,7 +16,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
   e.respondWith(
-    fetch(e.request).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); return r; })
+    fetch(e.request, { cache: 'no-cache' }).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); return r; })
       .catch(() => caches.match(e.request))
   );
 });

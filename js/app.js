@@ -510,7 +510,7 @@ function openProfile() {
 /* ------------------------------ thông báo đẩy ----------------------------- */
 async function registerSW() {
   if ('serviceWorker' in navigator) {
-    try { S.swReg = await navigator.serviceWorker.register('sw.js'); } catch (e) { console.warn('SW', e); }
+    try { S.swReg = await navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }); } catch (e) { console.warn('SW', e); }
   }
 }
 async function enablePush() {
